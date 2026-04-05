@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTTS } from '@/hooks/useTTS';
 
 const CloudSVG = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 100 60" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -22,28 +23,20 @@ export default function LandingPage() {
   const [demoLang, setDemoLang] = useState("en-IN");
   const [isDemoSpeaking, setIsDemoSpeaking] = useState(false);
 
+  const { speak } = useTTS();
+
   useEffect(() => setMounted(true), []);
 
   const barHeights = [25, 45, 65, 85, 50, 110, 180, 55, 195, 80, 65, 140, 75, 100, 60, 85, 50, 75, 110, 165, 45, 85, 170, 55, 25, 145, 65, 85, 250, 110, 80, 55, 95, 80, 65, 40, 75, 100, 60, 85, 50, 75, 110, 65, 45, 85, 70, 55];
   
-  const handleDemoSpeak = () => {
+  const handleDemoSpeak = async () => {
     if (!demoText.trim()) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(demoText);
-    utterance.lang = demoLang;
-    
-    // Explicitly find and attach a matching voice, as Windows/Chrome sometimes fails to auto-switch
-    const voices = window.speechSynthesis.getVoices();
-    const langCodePrefix = demoLang.split('-')[0];
-    const voice = voices.find(v => v.lang === demoLang) || voices.find(v => v.lang.startsWith(langCodePrefix));
-    if (voice) {
-      utterance.voice = voice;
+    setIsDemoSpeaking(true);
+    try {
+      await speak(demoText, demoLang, 1, 'Female');
+    } finally {
+      setIsDemoSpeaking(false);
     }
-
-    utterance.onstart = () => setIsDemoSpeaking(true);
-    utterance.onend = () => setIsDemoSpeaking(false);
-    utterance.onerror = () => setIsDemoSpeaking(false);
-    window.speechSynthesis.speak(utterance);
   };
 
   return (

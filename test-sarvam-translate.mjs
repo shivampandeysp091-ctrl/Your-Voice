@@ -5,19 +5,19 @@ const sarvamKeyMatch = envContent.match(/SARVAM_API_KEY=(.*)/);
 const sarvamKey = sarvamKeyMatch ? sarvamKeyMatch[1].trim() : '';
 
 async function test() {
-  console.log("Testing Sarvam API with key:", sarvamKey.slice(0, 4) + '...');
+  console.log("Testing Sarvam Translate API...");
   
   const payload = {
-    inputs: ["This is a test"],
-    target_language_code: "hi-IN",
-    speaker: "abhilash",
-    model: "bulbul:v2",
-    speech_sample_rate: 8000,
-    enable_preprocessing: true,
-    pace: 1.0
+    input: "i am hungry",
+    source_language_code: "en-IN",
+    target_language_code: "mr-IN",
+    speaker_gender: "Female",
+    mode: "classic-colloquial",
+    model: "mayura:v1",
+    enable_preprocessing: true
   };
 
-  const response = await fetch('https://api.sarvam.ai/text-to-speech', {
+  const response = await fetch('https://api.sarvam.ai/translate', {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json',
@@ -31,7 +31,8 @@ async function test() {
     console.error("SARVAM ERROR STATUS:", response.status);
     console.error("SARVAM ERROR TEXT:", errText);
   } else {
-    console.log("SARVAM API TEST SUCCESS");
+    const data = await response.json();
+    console.log("SARVAM API TEST SUCCESS", data);
   }
 }
 

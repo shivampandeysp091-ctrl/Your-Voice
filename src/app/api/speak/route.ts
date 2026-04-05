@@ -8,7 +8,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No text' }, { status: 400 });
     }
 
-    if (!process.env.SARVAM_API_KEY) {
+    const apiKey = process.env.SARVAM_API_KEY?.trim();
+    if (!apiKey) {
       return NextResponse.json({ fallback: true });
     }
 
@@ -22,7 +23,7 @@ export async function POST(req: Request) {
           {
             method: 'POST',
             headers: {
-              'api-subscription-key': process.env.SARVAM_API_KEY,
+              'api-subscription-key': apiKey,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
       {
         method: 'POST',
         headers: {
-          'api-subscription-key': process.env.SARVAM_API_KEY,
+          'api-subscription-key': apiKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
