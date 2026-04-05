@@ -1,27 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --purple: #9b5de5;
+  --purple-light: #c084fc;
+  --purple-soft: #ede9fe;
+  --purple-dark: #7c3aed;
+  --text-dark: #1a1a2e;
+  --text-mid: #4a4a6a;
+  --text-soft: #8b8baa;
+  --red: #ef4444;
+  --red-soft: #fee2e2;
+  --font-scale: 1;
+  --base-font: 16px;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(160deg, #f5f3ff 0%, #ede9fe 40%, #ddd6fe 100%);
+  color: var(--text-mid);
+  min-height: 100vh;
+  font-size: var(--base-font);
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes waveform {
+  0% { transform: scaleY(0.6); }
+  100% { transform: scaleY(1.2); }
+}
+
+.high-contrast { 
+  filter: contrast(1.5); 
+  background: #000 !important; 
+  color: #fff !important; 
+}
+
+.high-contrast * { 
+  border-color: #fff !important; 
 }
