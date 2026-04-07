@@ -16,17 +16,23 @@ export default function EmergencySetup() {
   const [savedStatus, setSavedStatus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    // Load from local storage first
+    // Determine key based on user to completely sandbox local storage between different accounts
+    const storageKey = user ? `yv-emergency-contacts-${user.uid}` : 'yv-emergency-contacts-guest';
+    
     try {
-      const local = localStorage.getItem('yv-emergency-contacts');
+      const local = localStorage.getItem(storageKey);
       if (local) {
         const parsed = JSON.parse(local);
         if (parsed.family) setFamily(parsed.family);
         if (parsed.friend) setFriend(parsed.friend);
         if (parsed.caregiver) setCaregiver(parsed.caregiver);
+      } else {
+        // Clear if nothing found for this user
+        setFamily({ name: '', phone: '' });
+        setFriend({ name: '', phone: '' });
+        setCaregiver({ name: '', phone: '' });
       }
     } catch(e) {}
-
     // Load from FB if logged in
     if (user) {
       const loadFB = async () => {
@@ -47,10 +53,11 @@ export default function EmergencySetup() {
   }, [user]);
 
   const handleSave = async (role: string, data: { name: string, phone: string }) => {
+    const storageKey = user ? `yv-emergency-contacts-${user.uid}` : 'yv-emergency-contacts-guest';
     // 1. Save to local storage
-    const currentLocal = JSON.parse(localStorage.getItem('yv-emergency-contacts') || '{}');
+    const currentLocal = JSON.parse(localStorage.getItem(storageKey) || '{}');
     currentLocal[role] = data;
-    localStorage.setItem('yv-emergency-contacts', JSON.stringify(currentLocal));
+    localStorage.setItem(storageKey, JSON.stringify(currentLocal));
 
     // 2. Save to FB if user exists
     if (user) {

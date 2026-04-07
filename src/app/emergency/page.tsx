@@ -22,11 +22,18 @@ export default function Emergency() {
   const [loadingContact, setLoadingContact] = useState('');
 
   useEffect(() => {
-    const local = localStorage.getItem('yv-emergency-contacts');
+    const storageKey = user ? `yv-emergency-contacts-${user.uid}` : 'yv-emergency-contacts-guest';
+    const local = localStorage.getItem(storageKey);
     if (local) {
       try {
         setContacts(JSON.parse(local));
       } catch(e){}
+    } else {
+      setContacts({
+        family: { name: '', phone: '' },
+        friend: { name: '', phone: '' },
+        caregiver: { name: '', phone: '' }
+      });
     }
 
     if (user) {

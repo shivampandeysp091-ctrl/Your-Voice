@@ -33,7 +33,7 @@ export default function ProfilePage() {
       // Fetch stats
       getEmergencyContacts(user.uid).then(contacts => setContactCount(contacts.length)).catch(() => setContactCount(0));
       
-      const local = localStorage.getItem('yv-emergency-contacts');
+      const local = localStorage.getItem(`yv-emergency-contacts-${user.uid}`);
       if (local) {
         try {
           const parsed = JSON.parse(local);
