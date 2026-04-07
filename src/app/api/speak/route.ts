@@ -15,8 +15,12 @@ export async function POST(req: Request) {
 
     let textToSpeak = text;
 
-    // ── STEP 1: Translate using Sarvam Mayura (only if not English) ──
-    if (language && language !== 'en-IN') {
+    // ── STEP 1: Translate using Sarvam Mayura ──
+    const isTargetEnglish = language === 'en-IN';
+    const sourceLanguage = isTargetEnglish ? 'hi-IN' : 'en-IN';
+
+    // We skip translation ONLY if they specifically want pure English to English
+    if (language) {
       try {
         const translateRes = await fetch(
           'https://api.sarvam.ai/translate',
@@ -28,7 +32,7 @@ export async function POST(req: Request) {
             },
             body: JSON.stringify({
               input: text,
-              source_language_code: 'en-IN',
+              source_language_code: sourceLanguage,
               target_language_code: language,
               speaker_gender: gender === 'Male' ? 'Male' : 'Female',
               mode: 'classic-colloquial',
