@@ -118,6 +118,21 @@ export default function ProfilePage() {
             />
           </div>
 
+          <div className="w-full mb-5 relative">
+            <label className="block text-sm font-bold text-[#1a1a2e] mb-2">Avatar URL (Optional)</label>
+            <div className="relative">
+              <input 
+                type="text" 
+                value={photo}
+                onChange={(e) => setPhoto(e.target.value)}
+                className="w-full border-2 border-[#ede9fe] rounded-xl p-3.5 pl-10 text-base text-[#1a1a2e] outline-none focus:border-[#c084fc]"
+                placeholder="https://example.com/photo.jpg"
+              />
+              <LinkIcon className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Firebase Storage is currently locked. Paste any image link here instead!</p>
+          </div>
+
           {/* Core Stats */}
           <div className="flex gap-4 w-full mb-8">
             <Link href="/favourites" className="flex-1 bg-[#fffbf0] border border-amber-100 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1 transition-transform">
