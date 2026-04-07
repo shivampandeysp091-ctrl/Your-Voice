@@ -2,11 +2,12 @@
 import Navbar from '@/components/Navbar';
 import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/hooks/useAuth';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { updateProfile } from 'firebase/auth';
-import { auth, getFavourites, getEmergencyContacts } from '@/lib/firebase';
+import { auth, storage, getFavourites, getEmergencyContacts } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
-import { UserCircle2, Save, Loader2, Mail, Link as LinkIcon, Star, Phone } from 'lucide-react';
+import { UserCircle2, Save, Loader2, Mail, Link as LinkIcon, Star, Phone, Camera } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ProfilePage() {
@@ -15,9 +16,11 @@ export default function ProfilePage() {
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [favCount, setFavCount] = useState<number | null>(null);
   const [contactCount, setContactCount] = useState<number | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -47,6 +50,26 @@ export default function ProfilePage() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    
+    setIsUploading(true);
+    setMessage("");
+    try {
+      const fileRef = ref(storage, `avatars/${user.uid}_${Date.now()}`);
+      await uploadBytes(fileRef, file);
+      const downloadUrl = await getDownloadURL(fileRef);
+      setPhoto(downloadUrl);
+      setMessage("Image ready! Click 'Save Changes' to apply.");
+    } catch (err: any) {
+      console.error(err);
+      setMessage(err.message.includes("unauthorized") ? "Storage Error: Please enable Storage rules in Firebase Console." : "Failed to upload image.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   if (loading || !user) return <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">Loading...</div>;
 
   return (
@@ -57,12 +80,28 @@ export default function ProfilePage() {
         <h1 className="text-3xl font-extrabold text-[#1a1a2e] mb-8 text-center">My Profile</h1>
         
         <div className="bg-white rounded-3xl p-8 border border-purple-100 shadow-[0_8px_40px_rgba(155,93,229,0.06)] flex flex-col items-center">
-          <div className="w-24 h-24 rounded-full bg-[#ede9fe] border-4 border-[#c084fc] flex items-center justify-center overflow-hidden mb-6">
-            {photo || user?.photoURL ? (
-              <img src={photo || user?.photoURL || ""} alt="User avatar" className="w-full h-full object-cover" />
-            ) : (
-              <UserCircle2 className="w-12 h-12 text-[#c084fc]" />
-            )}
+          
+          <div className="relative mb-6 group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <div className="w-24 h-24 rounded-full bg-[#ede9fe] border-4 border-[#c084fc] flex items-center justify-center overflow-hidden transition-all group-hover:scale-105">
+              {isUploading ? (
+                <Loader2 className="w-8 h-8 text-[#c084fc] animate-spin" />
+              ) : photo || user?.photoURL ? (
+                <img src={photo || user?.photoURL || ""} alt="User avatar" className="w-full h-full object-cover" />
+              ) : (
+                <UserCircle2 className="w-12 h-12 text-[#c084fc]" />
+              )}
+            </div>
+            {/* Upload Overlay */}
+            <div className="absolute inset-0 bg-black/40 rounded-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <Camera className="w-6 h-6 text-white" />
+            </div>
+            <input 
+              type="file" 
+              accept="image/*"
+              className="hidden" 
+              ref={fileInputRef} 
+              onChange={handleImageUpload} 
+            />
           </div>
 
           {/* Core Stats */}
@@ -119,14 +158,14 @@ export default function ProfilePage() {
           </div>
 
           {message && (
-            <div className={`mb-4 text-sm font-bold ${message.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+            <div className={`mb-4 w-full text-center text-sm font-bold ${message.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
               {message}
             </div>
           )}
 
           <button 
             onClick={handleUpdate}
-            disabled={isSaving || !name.trim()}
+            disabled={isSaving || isUploading || !name.trim()}
             className="w-full bg-[#9b5de5] text-white rounded-xl px-6 py-4 font-extrabold flex items-center justify-center gap-2 hover:bg-[#7c3aed] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
