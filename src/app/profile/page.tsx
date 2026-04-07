@@ -8,18 +8,19 @@ import { auth, storage, getFavourites, getEmergencyContacts } from '@/lib/fireba
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import { UserCircle2, Save, Loader2, Mail, Link as LinkIcon, Star, Phone, Camera } from 'lucide-react';
+import { useFavorites } from '@/hooks/useFavorites';
 import Link from 'next/link';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
+  const { favourites } = useFavorites();
   const router = useRouter();
   const [name, setName] = useState("");
   const [photo, setPhoto] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
-  const [favCount, setFavCount] = useState<number | null>(null);
-  const [contactCount, setContactCount] = useState<number | null>(null);
+  const [contactCount, setContactCount] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -30,8 +31,19 @@ export default function ProfilePage() {
       setPhoto(user.photoURL || "");
       
       // Fetch stats
-      getFavourites(user.uid).then(favs => setFavCount(favs.length)).catch(() => setFavCount(0));
       getEmergencyContacts(user.uid).then(contacts => setContactCount(contacts.length)).catch(() => setContactCount(0));
+      
+      const local = localStorage.getItem('yv-emergency-contacts');
+      if (local) {
+        try {
+          const parsed = JSON.parse(local);
+          let c = 0;
+          if (parsed.family?.phone) c++;
+          if (parsed.friend?.phone) c++;
+          if (parsed.caregiver?.phone) c++;
+          if (c > 0) setContactCount(c);
+        } catch(e){}
+      }
     }
   }, [user, loading, router]);
 
@@ -87,6 +99,8 @@ export default function ProfilePage() {
                 <Loader2 className="w-8 h-8 text-[#c084fc] animate-spin" />
               ) : photo || user?.photoURL ? (
                 <img src={photo || user?.photoURL || ""} alt="User avatar" className="w-full h-full object-cover" />
+              ) : name ? (
+                <span className="text-4xl font-black text-[#9b5de5]">{name.charAt(0).toUpperCase()}</span>
               ) : (
                 <UserCircle2 className="w-12 h-12 text-[#c084fc]" />
               )}
@@ -108,13 +122,13 @@ export default function ProfilePage() {
           <div className="flex gap-4 w-full mb-8">
             <Link href="/favourites" className="flex-1 bg-[#fffbf0] border border-amber-100 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1 transition-transform">
               <Star className="w-6 h-6 text-amber-500 mb-1" />
-              <div className="font-extrabold text-[#1a1a2e] text-xl">{favCount === null ? '-' : favCount}</div>
+              <div className="font-extrabold text-[#1a1a2e] text-xl">{favourites.length}</div>
               <div className="text-[10px] uppercase tracking-wider font-bold text-amber-600">Favourites</div>
             </Link>
             
             <Link href="/emergency-setup" className="flex-1 bg-[#f0f9ff] border border-blue-100 rounded-2xl p-4 flex flex-col items-center justify-center cursor-pointer hover:-translate-y-1 transition-transform">
               <Phone className="w-6 h-6 text-blue-500 mb-1" />
-              <div className="font-extrabold text-[#1a1a2e] text-xl">{contactCount === null ? '-' : contactCount}</div>
+              <div className="font-extrabold text-[#1a1a2e] text-xl">{contactCount}</div>
               <div className="text-[10px] uppercase tracking-wider font-bold text-blue-600">SOS Contacts</div>
             </Link>
           </div>
@@ -130,19 +144,6 @@ export default function ProfilePage() {
             />
           </div>
 
-          <div className="w-full mb-5 relative">
-            <label className="block text-sm font-bold text-[#1a1a2e] mb-2">Avatar URL (Optional)</label>
-            <div className="relative">
-              <input 
-                type="text" 
-                value={photo}
-                onChange={(e) => setPhoto(e.target.value)}
-                className="w-full border-2 border-[#ede9fe] rounded-xl p-3.5 pl-10 text-base text-[#1a1a2e] outline-none focus:border-[#c084fc]"
-                placeholder="https://example.com/photo.jpg"
-              />
-              <LinkIcon className="w-5 h-5 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
-            </div>
-          </div>
 
           <div className="w-full mb-8 relative">
             <label className="block text-sm font-bold text-[#1a1a2e] mb-2">Email Address</label>

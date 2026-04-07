@@ -49,6 +49,8 @@ export default function Navbar() {
           >
             {user?.photoURL ? (
               <img src={user.photoURL} alt="User" className="w-full h-full object-cover" />
+            ) : user?.displayName ? (
+              <span className="text-[#9b5de5] font-black text-sm">{user.displayName.charAt(0).toUpperCase()}</span>
             ) : (
               <UserCircle2 className="w-5 h-5 text-[#c084fc]" />
             )}
