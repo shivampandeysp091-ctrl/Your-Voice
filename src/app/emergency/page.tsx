@@ -72,6 +72,20 @@ export default function Emergency() {
   const vibrateAlert = () => {
     if (navigator.vibrate) {
       navigator.vibrate([300,100,300,100,300,500,100,100,100,100,100,500,300,100,300,100,300]);
+    }
+  };
+
+  const triggerWhatsApp = (phone: string, lat?: number, lng?: number) => {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const finalPhone = cleanPhone.length >= 10 ? '91' + cleanPhone.slice(-10) : cleanPhone;
+    
+    const locationString = lat && lng ? `Location: https://maps.google.com/?q=${lat},${lng}` : "Location unavailable";
+    const message = `🚨 URGENT: ${user?.displayName || 'Someone'} needs immediate help!\n\n${locationString}\n\n— Sent via YourVoice app`;
+    const encoded = encodeURIComponent(message);
+    const url = `https://wa.me/${finalPhone}?text=${encoded}`;
+    window.open(url, '_blank');
+  };
+
   const sendAlertSMS = async (role: string, phone: string, name: string) => {
     if (!phone) {
       showToast('Please set a phone number first!');
@@ -79,45 +93,26 @@ export default function Emergency() {
     }
     
     setLoadingContact(role);
-    
-    const sendRequest = async (lat?: number, lng?: number) => {
-      try {
-        const res = await fetch('/api/alert', {
-          method: 'POST',
-          body: JSON.stringify({ 
-            contactPhone: phone, 
-            userName: user?.displayName || 'User', 
-            lat, 
-            lng 
-          }),
-          headers: { 'Content-Type': 'application/json' }
-        });
-        if (res.ok) {
-          showToast(`Silent Alert sent to ${name}!`);
-        } else {
-          showToast('Failed. (Requires Fast2SMS ₹100 Top-Up)');
-        }
-      } catch(e) {
-        showToast('Error sending alert');
-        console.error(e);
-      } finally {
-        setLoadingContact('');
-      }
-    };
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
-          sendRequest(position.coords.latitude, position.coords.longitude);
+          triggerWhatsApp(phone, position.coords.latitude, position.coords.longitude);
+          setLoadingContact('');
+          showToast(`Opening WhatsApp for ${name}...`);
         },
         error => {
           console.warn("Location error:", error);
-          sendRequest(); // send without location
+          triggerWhatsApp(phone); // send without location
+          setLoadingContact('');
+          showToast(`Opening WhatsApp for ${name}...`);
         },
         { timeout: 10000, enableHighAccuracy: true }
       );
     } else {
-      sendRequest(); // unsupported
+      triggerWhatsApp(phone); // unsupported
+      setLoadingContact('');
+      showToast(`Opening WhatsApp for ${name}...`);
     }
   };
 
