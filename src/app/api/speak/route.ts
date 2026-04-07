@@ -16,8 +16,7 @@ export async function POST(req: Request) {
     let textToSpeak = text;
 
     // ── STEP 1: Translate using Sarvam Mayura ──
-    const isTargetEnglish = language === 'en-IN';
-    const sourceLanguage = isTargetEnglish ? 'hi-IN' : 'en-IN';
+    const sourceLanguage = language === 'hi-IN' ? 'en-IN' : 'hi-IN';
 
     // We skip translation ONLY if they specifically want pure English to English
     if (language) {
