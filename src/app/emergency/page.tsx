@@ -76,11 +76,7 @@ export default function Emergency() {
     }
   };
 
-  const vibrateAlert = () => {
-    if (navigator.vibrate) {
-      navigator.vibrate([300,100,300,100,300,500,100,100,100,100,100,500,300,100,300,100,300]);
-    }
-  };
+
 
   const triggerWhatsApp = (phone: string, lat?: number, lng?: number) => {
     const cleanPhone = phone.replace(/\D/g, '');
@@ -179,15 +175,11 @@ export default function Emergency() {
             </button>
           </div>
 
-          {/* RIGHT TOP: Location & Vibrate */}
-          <div className="grid grid-rows-2 gap-4">
-            <button onClick={shareLocation} className="bg-white rounded-xl p-4 border border-purple-100 shadow-sm flex items-center gap-4 text-left hover:border-[#c084fc] transition-colors">
+          {/* RIGHT TOP: Location */}
+          <div className="flex flex-col justify-center gap-4">
+            <button onClick={shareLocation} className="bg-white rounded-xl p-4 border border-purple-100 shadow-sm flex items-center gap-4 text-left hover:border-[#c084fc] transition-colors h-full">
               <div className="bg-[#ede9fe] p-3 rounded-full text-[#9b5de5]"><MapPin className="w-6 h-6" /></div>
               <span className="font-bold text-[#1a1a2e]">Share your location with contacts</span>
-            </button>
-            <button onClick={vibrateAlert} className="bg-white rounded-xl p-4 border border-purple-100 shadow-sm flex items-center gap-4 text-left hover:border-[#c084fc] transition-colors">
-              <div className="bg-[#ede9fe] p-3 rounded-full text-[#9b5de5]"><Smartphone className="w-6 h-6" /></div>
-              <span className="font-bold text-[#1a1a2e]">SOS vibration pattern</span>
             </button>
           </div>
         </div>
