@@ -132,12 +132,6 @@ export default function LandingPage() {
               <div className="inline-block mt-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-600">Multilingual</div>
             </div>
             <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-[0_4px_20px_rgba(155,93,229,0.06)]">
-              <div className="w-12 h-12 rounded-2xl bg-[#ede9fe] flex items-center justify-center text-2xl mb-3">✈️</div>
-              <h3 className="font-bold text-[#1a1a2e]">Works Offline</h3>
-              <p className="text-sm text-[#5a4a7a] mt-1">Core TTS and emergency features work without internet. Device voice handles offline speech.</p>
-              <div className="inline-block mt-2.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#ede9fe] text-[#9b5de5]">Reliable</div>
-            </div>
-            <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-[0_4px_20px_rgba(155,93,229,0.06)]">
               <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl mb-3">♿</div>
               <h3 className="font-bold text-[#1a1a2e]">Accessibility First</h3>
               <p className="text-sm text-[#5a4a7a] mt-1">High contrast mode, adjustable font size globally, screen reader support, large touch targets.</p>
@@ -224,63 +218,6 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* SECTION 5 — TESTIMONIALS */}
-      <div className="py-14 px-10 bg-gradient-to-br from-[#f5f3ff] to-[#ede9fe] relative z-20">
-        <div className="max-w-6xl mx-auto flex flex-col items-center">
-          <div className="bg-[#ede9fe] text-[#9b5de5] text-xs font-bold px-4 py-1.5 rounded-full border border-[#c084fc] inline-block mb-4">✦ Real stories</div>
-          <h2 className="text-3xl font-extrabold text-[#1a1a2e]">Making a real difference</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-9 w-full">
-            <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-[0_4px_20px_rgba(155,93,229,0.06)]">
-              <div className="text-amber-400 text-xs mb-2">★★★★★</div>
-              <p className="text-sm text-[#4a4a6a] leading-7 italic mb-4">"YourVoice has completely changed how I communicate with my family. I can finally express what I feel without any frustration."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#9b5de5] to-[#c084fc] text-white text-sm font-extrabold flex items-center justify-center">R</div>
-                <div>
-                  <div className="text-sm font-bold text-[#1a1a2e]">Ravi Sharma</div>
-                  <div className="text-[11px] text-[#8b8baa]">User with speech disability · Mumbai</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-[0_4px_20px_rgba(155,93,229,0.06)]">
-              <div className="text-amber-400 text-xs mb-2">★★★★★</div>
-              <p className="text-sm text-[#4a4a6a] leading-7 italic mb-4">"As a speech therapist I recommend YourVoice to all my patients. The Hindi and Marathi support is excellent and the emergency features give real peace."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#9b5de5] to-[#c084fc] text-white text-sm font-extrabold flex items-center justify-center">D</div>
-                <div>
-                  <div className="text-sm font-bold text-[#1a1a2e]">Dr. Priya Nair</div>
-                  <div className="text-[11px] text-[#8b8baa]">Speech Language Pathologist · Pune</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-[0_4px_20px_rgba(155,93,229,0.06)]">
-              <div className="text-amber-400 text-xs mb-2">★★★★★</div>
-              <p className="text-sm text-[#4a4a6a] leading-7 italic mb-4">"My son has cerebral palsy and this app gave him independence. The SOS feature gives us peace of mind when he is at school without us."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#9b5de5] to-[#c084fc] text-white text-sm font-extrabold flex items-center justify-center">S</div>
-                <div>
-                  <div className="text-sm font-bold text-[#1a1a2e]">Sunita Patil</div>
-                  <div className="text-[11px] text-[#8b8baa]">Parent of child with CP · Nagpur</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 border border-purple-100 shadow-[0_4px_20px_rgba(155,93,229,0.06)]">
-              <div className="text-amber-400 text-xs mb-2">★★★★★</div>
-              <p className="text-sm text-[#4a4a6a] leading-7 italic mb-4">"Finally an assistive app that works in Tamil! The voice quality is natural and my patients use it independently without caregiver help."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#9b5de5] to-[#c084fc] text-white text-sm font-extrabold flex items-center justify-center">K</div>
-                <div>
-                  <div className="text-sm font-bold text-[#1a1a2e]">Dr. Karthik Rajan</div>
-                  <div className="text-[11px] text-[#8b8baa]">Neurologist · Chennai</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* SECTION 6 — SDG SECTION */}
       <div className="px-10 pb-14 bg-gradient-to-br from-[#f5f3ff] to-[#ede9fe] relative z-20">
@@ -335,7 +272,7 @@ export default function LandingPage() {
         
         <div className="flex flex-wrap gap-5 justify-center mt-6 text-sm opacity-80">
           <span>✓ No app download</span>
-          <span>✓ Works offline</span>
+
           <span>✓ 100% free</span>
           <span>✓ WCAG accessible</span>
         </div>

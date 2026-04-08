@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mic, Star, AlertTriangle, Globe } from 'lucide-react';
+import { Mic, Star, AlertTriangle, Globe, Mail } from 'lucide-react';
 import { signInWithGoogle, auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 export default function Signup() {
   const router = useRouter();
@@ -13,6 +13,7 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState('');
+  const [verificationSent, setVerificationSent] = useState(false);
 
   // Password strength logic
   const checkStrength = () => {
@@ -43,9 +44,9 @@ export default function Signup() {
       return;
     }
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      // Wait for auth to settle and maybe create doc in users/ logic here...
-      router.push('/home');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await sendEmailVerification(userCredential.user);
+      setVerificationSent(true);
     } catch (err: any) {
       setError(err.message || 'Error creating account');
     }
@@ -89,73 +90,88 @@ export default function Signup() {
 
         {error && <p className="text-red-500 text-sm bg-red-50 p-3 rounded-lg mb-4">{error}</p>}
 
-        <button 
-          onClick={handleGoogleSignUp}
-          className="w-full flex justify-center items-center gap-3 border border-gray-200 bg-white rounded-full py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm mb-6"
-        >
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
-          Sign up with Google — Recommended
-        </button>
-
-        <div className="flex items-center gap-4 mb-6">
-          <div className="flex-1 h-px bg-gray-200"></div>
-          <span className="text-xs text-[#8b8baa]">or sign up with email</span>
-          <div className="flex-1 h-px bg-gray-200"></div>
-        </div>
-
-        <form onSubmit={handleEmailSignUp} className="flex flex-col gap-4">
-          <div>
-            <input 
-              type="text" 
-              placeholder="Full name"
-              required
-              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#9b5de5] bg-[#fdfcff]"
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-          </div>
-          <div>
-            <input 
-              type="email" 
-              placeholder="Email address"
-              required
-              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#9b5de5] bg-[#fdfcff]"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </div>
-          <div>
-            <input 
-              type="password" 
-              placeholder="Password"
-              required
-              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#9b5de5] bg-[#fdfcff]"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-            {/* Strength bar */}
-            <div className="flex gap-1 mt-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className={`h-1 flex-1 rounded-full ${strength >= i ? strengthColors[strength] : 'bg-gray-200'}`}></div>
-              ))}
+        {verificationSent ? (
+          <div className="flex flex-col items-center text-center mt-6 p-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+              <Mail className="w-8 h-8 text-green-600" />
             </div>
+            <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">Verify your email</h2>
+            <p className="text-sm text-[#5a4a7a] mb-6">We've sent a verification link to <strong className="text-[#1a1a2e]">{email}</strong>. Please check your inbox and click the link to activate your free account.</p>
+            <Link href="/login" className="w-full bg-[#9b5de5] text-white rounded-full py-3 font-bold hover:bg-[#7c3aed] transition-colors shadow-md block text-center">
+              Go to Login
+            </Link>
           </div>
-          
-          <div className="flex items-start gap-2 mt-2 cursor-pointer" onClick={() => setAgreed(!agreed)}>
-            <input type="checkbox" checked={agreed} readOnly className="mt-1 accent-[#9b5de5]" />
-            <p className="text-xs text-[#8b8baa]">I agree to the Terms of Service and Privacy Policy</p>
-          </div>
-          
-          <button type="submit" className="w-full bg-[#9b5de5] text-white rounded-full py-3 font-bold mt-2 hover:bg-[#7c3aed] transition-colors shadow-md">
-            Create Free Account
-          </button>
-        </form>
+        ) : (
+          <>
+            <button 
+              onClick={handleGoogleSignUp}
+              className="w-full flex justify-center items-center gap-3 border border-gray-200 bg-white rounded-full py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm mb-6"
+            >
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+              Sign up with Google — Recommended
+            </button>
 
-        <div className="text-center mt-6">
-          <Link href="/login" className="text-sm text-[#4a4a6a]">
-            Already have an account? <span className="text-[#9b5de5] font-bold">Sign in &rarr;</span>
-          </Link>
-        </div>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex-1 h-px bg-gray-200"></div>
+              <span className="text-xs text-[#8b8baa]">or sign up with email</span>
+              <div className="flex-1 h-px bg-gray-200"></div>
+            </div>
+
+            <form onSubmit={handleEmailSignUp} className="flex flex-col gap-4">
+              <div>
+                <input 
+                  type="text" 
+                  placeholder="Full name"
+                  required
+                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#9b5de5] bg-[#fdfcff]"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                <input 
+                  type="email" 
+                  placeholder="Email address"
+                  required
+                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#9b5de5] bg-[#fdfcff]"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <input 
+                  type="password" 
+                  placeholder="Password"
+                  required
+                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-[#9b5de5] bg-[#fdfcff]"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+                {/* Strength bar */}
+                <div className="flex gap-1 mt-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className={`h-1 flex-1 rounded-full ${strength >= i ? strengthColors[strength] : 'bg-gray-200'}`}></div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-2 mt-2 cursor-pointer" onClick={() => setAgreed(!agreed)}>
+                <input type="checkbox" checked={agreed} readOnly className="mt-1 accent-[#9b5de5]" />
+                <p className="text-xs text-[#8b8baa]">I agree to the Terms of Service and Privacy Policy</p>
+              </div>
+              
+              <button type="submit" className="w-full bg-[#9b5de5] text-white rounded-full py-3 font-bold mt-2 hover:bg-[#7c3aed] transition-colors shadow-md">
+                Create Free Account
+              </button>
+            </form>
+
+            <div className="text-center mt-6">
+              <Link href="/login" className="text-sm text-[#4a4a6a]">
+                Already have an account? <span className="text-[#9b5de5] font-bold">Sign in &rarr;</span>
+              </Link>
+            </div>
+          </>
+        )}
 
       </div>
     </div>

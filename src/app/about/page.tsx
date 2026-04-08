@@ -59,10 +59,10 @@ export default function AboutPage() {
           <div className="relative z-10 max-w-2xl">
             <h2 className="text-3xl font-extrabold mb-6">The Story Behind the Screen</h2>
             <p className="text-gray-300 text-lg leading-relaxed mb-6">
-              Built with love using cutting-edge technologies like Next.js, Sarvam AI, and Firebase. This platform was envisioned to help people with vocal disabilities, throat injuries, and tourists navigating new territories safely.
+              Built with love. This platform was envisioned to help people with vocal disabilities, throat injuries, and tourists navigating new territories safely.
             </p>
             <p className="text-gray-300 text-lg leading-relaxed font-medium">
-              Developed by <strong className="text-white bg-[#9b5de5]/20 px-2 py-1 rounded">Shivam Pandey</strong> to bridge the gap between complex AI and true, emotional human connection.
+              Developed by <strong className="text-white bg-[#9b5de5]/20 px-2 py-1 rounded">Shivam Pandey & Raksha Poojari</strong> to bridge the gap between complex AI and true, emotional human connection.
             </p>
           </div>
         </div>
