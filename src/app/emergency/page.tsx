@@ -51,10 +51,10 @@ export default function Emergency() {
     }
   }, [user]);
 
-  const emergencyNumber = "+919999999999"; 
-  
   const callForHelp = () => {
-    window.location.href = `tel:${emergencyNumber}`;
+    const primaryContact = contacts?.family?.phone || contacts?.friend?.phone || contacts?.caregiver?.phone || "112";
+    const cleanedContact = primaryContact.replace(/[^0-9]/g, '');
+    window.location.href = `tel:${cleanedContact}`;
   };
 
   const showToast = (msg: string) => {
