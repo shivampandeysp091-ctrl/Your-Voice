@@ -153,6 +153,7 @@ export default function Signup() {
                     <div key={i} className={`h-1 flex-1 rounded-full ${strength >= i ? strengthColors[strength] : 'bg-gray-200'}`}></div>
                   ))}
                 </div>
+                <p className="text-[10px] text-[#8b8baa] mt-2 ml-1">Password must be at least 8 characters long and contain uppercase, number, and symbol to be strong.</p>
               </div>
               
               <div className="flex items-start gap-2 mt-2 cursor-pointer" onClick={() => setAgreed(!agreed)}>
