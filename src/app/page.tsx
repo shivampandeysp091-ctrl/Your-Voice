@@ -20,7 +20,7 @@ export default function LandingPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [demoText, setDemoText] = useState("");
-  const [demoLang, setDemoLang] = useState("en-IN");
+  const [demoLang, setDemoLang] = useState("hi-IN");
   const [isDemoSpeaking, setIsDemoSpeaking] = useState(false);
 
   const { speak } = useTTS();
