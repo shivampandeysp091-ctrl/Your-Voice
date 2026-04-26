@@ -39,7 +39,7 @@ export default function Navbar() {
       </Link>
       <div className="flex items-center gap-4">
         <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-[#9b5de5]">About us</Link>
-        <Link href="/demo" className="text-sm font-medium text-gray-600 hover:text-[#9b5de5]">Demo</Link>
+        <Link href="/#demo" className="text-sm font-medium text-gray-600 hover:text-[#9b5de5]">Demo</Link>
         
         <div className="relative" ref={dropdownRef}>
           <button 

@@ -178,7 +178,7 @@ export default function LandingPage() {
       </div>
 
       {/* SECTION 4 — LIVE DEMO STRIP */}
-      <div className="py-14 px-10  relative z-20">
+      <div id="demo" className="py-14 px-10 relative z-20">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 border border-purple-100 shadow-[0_8px_40px_rgba(155,93,229,0.10)]">
           <h2 className="text-xl font-extrabold text-[#1a1a2e]">Try it right here — no sign up needed</h2>
           <p className="text-sm text-[#5a4a7a] mt-1 mb-5">Type anything and hear it in your browser</p>
@@ -263,7 +263,7 @@ export default function LandingPage() {
             Get Started — It's Free
           </button>
           <button 
-            onClick={() => router.push('/demo')}
+            onClick={() => router.push('/#demo')}
             className="w-full md:w-auto bg-transparent text-white border-2 border-white/50 rounded-full px-9 py-4 text-base font-bold cursor-pointer hover:bg-white/10 transition-colors"
           >
             Watch Demo ▶
@@ -283,7 +283,7 @@ export default function LandingPage() {
         <div className="text-lg font-extrabold text-white">Your<span className="text-[#c084fc]">Voice</span></div>
         <div className="flex flex-wrap justify-center gap-5">
           <Link href="/about" className="text-sm text-white/50 font-medium no-underline hover:text-white transition-colors">About us</Link>
-          <Link href="/demo" className="text-sm text-white/50 font-medium no-underline hover:text-white transition-colors">Demo</Link>
+          <Link href="/#demo" className="text-sm text-white/50 font-medium no-underline hover:text-white transition-colors">Demo</Link>
           <Link href="/emergency" className="text-sm text-white/50 font-medium no-underline hover:text-white transition-colors">Emergency</Link>
           <Link href="/accessibility" className="text-sm text-white/50 font-medium no-underline hover:text-white transition-colors">Accessibility</Link>
         </div>

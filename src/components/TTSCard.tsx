@@ -5,7 +5,7 @@ import { LANGUAGES } from '@/lib/languages';
 
 interface Props {
   buttonLabel: "Speak" | "Add";
-  onAction: (text: string, lang: string) => void;
+  onAction: (text: string, lang: string) => Promise<void> | void;
   defaultText?: string;
   placeholder?: string;
   onTextChange?: (val: string) => void;
@@ -15,6 +15,7 @@ export default function TTSCard({ buttonLabel, onAction, defaultText = "", place
   const [text, setText] = useState(defaultText);
   const [langCode, setLangCode] = useState('hi-IN');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     setText(defaultText);
@@ -27,9 +28,14 @@ export default function TTSCard({ buttonLabel, onAction, defaultText = "", place
 
   const selectedLang = LANGUAGES.find(l => l.code === langCode) || LANGUAGES[1];
 
-  const handleAction = () => {
+  const handleAction = async () => {
     if (text.trim()) {
-      onAction(text.trim(), langCode);
+      setIsSpeaking(true);
+      try {
+        await onAction(text.trim(), langCode);
+      } finally {
+        setIsSpeaking(false);
+      }
       if (buttonLabel === "Add") {
         setText("");
         if (onTextChange) onTextChange("");
@@ -88,10 +94,11 @@ export default function TTSCard({ buttonLabel, onAction, defaultText = "", place
         
         <button 
           onClick={handleAction}
-          className="bg-[#9b5de5] text-white rounded-full px-6 py-3 font-bold flex items-center gap-2 hover:bg-[#7c3aed] transition-colors shadow-sm"
+          disabled={isSpeaking}
+          className={`${isSpeaking ? 'bg-[#10b981]' : 'bg-[#9b5de5]'} text-white rounded-full px-6 py-3 font-bold flex items-center gap-2 hover:bg-[#7c3aed] transition-colors shadow-sm disabled:opacity-90`}
         >
           <Volume2 className="w-5 h-5" />
-          {buttonLabel}
+          {isSpeaking && buttonLabel === 'Speak' ? 'Speaking...' : buttonLabel}
         </button>
       </div>
     </div>

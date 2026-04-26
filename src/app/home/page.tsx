@@ -35,8 +35,8 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [inputText]);
 
-  const handleSpeakAction = (text: string, lang: string) => {
-    speak(text, lang, 1, 'Female');
+  const handleSpeakAction = async (text: string, lang: string) => {
+    await speak(text, lang, 1, 'Female');
   };
 
   const handleChipClick = (phrase: string) => {
