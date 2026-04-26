@@ -263,7 +263,7 @@ export default function LandingPage() {
             Get Started — It's Free
           </button>
           <button 
-            onClick={() => router.push('/#demo')}
+            onClick={() => document.getElementById('demo')?.scrollIntoView({behavior: 'smooth'})}
             className="w-full md:w-auto bg-transparent text-white border-2 border-white/50 rounded-full px-9 py-4 text-base font-bold cursor-pointer hover:bg-white/10 transition-colors"
           >
             Watch Demo ▶
