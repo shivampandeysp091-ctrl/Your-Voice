@@ -41,12 +41,23 @@ body {
   100% { transform: scaleY(1.2); }
 }
 
-.high-contrast { 
-  filter: contrast(1.5); 
-  background: #000 !important; 
-  color: #fff !important; 
+html.dark {
+  filter: invert(1) hue-rotate(180deg);
+  background: #111;
 }
 
-.high-contrast * { 
-  border-color: #fff !important; 
+html.dark img, 
+html.dark video {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.high-contrast body * {
+  background-color: #000 !important;
+  color: #ffcc00 !important;
+  border-color: #ffcc00 !important;
+}
+
+html.high-contrast img,
+html.high-contrast svg {
+  background-color: transparent !important;
 }
