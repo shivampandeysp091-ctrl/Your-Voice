@@ -49,9 +49,8 @@ export default function Accessibility() {
   const handleFontSizeChange = (value: number) => {
     setFontSize(value);
     // Apply globally to entire app
-    document.documentElement.style.setProperty(
-      '--base-font', value + 'px'
-    );
+    document.documentElement.style.setProperty('--base-font', value + 'px');
+    document.documentElement.style.fontSize = value + 'px';
     localStorage.setItem('yv-font-size', value.toString());
   };
 
