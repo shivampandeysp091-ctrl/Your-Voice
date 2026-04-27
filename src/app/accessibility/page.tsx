@@ -163,9 +163,7 @@ export default function Accessibility() {
               <h1 className="font-extrabold text-[#9b5de5] mb-2 leading-none" style={{ fontSize: `${fontSize}px` }}>YourVoice</h1>
               <p className="text-sm text-[#8b8baa] mb-6">Adjust font size and contrast for better accessibility.</p>
               
-              <div className="bg-green-100 text-green-700 text-xs font-bold px-3 py-2 rounded-lg">
-                ✓ WCAG AA contrast met
-              </div>
+
             </div>
 
             <div className="bg-[#ede9fe] rounded-2xl p-6 shadow-sm border border-transparent flex flex-col items-start gap-4">
