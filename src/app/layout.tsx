@@ -18,9 +18,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `
           const size = localStorage.getItem('yv-font-size');
           if (size) {
-            document.documentElement.style.setProperty(
-              '--base-font', size + 'px'
-            );
+            document.documentElement.style.setProperty('--base-font', size + 'px');
+            document.documentElement.style.fontSize = size + 'px';
           }
           const mode = localStorage.getItem('yv-mode') || 'light';
           if (mode === 'dark') document.documentElement.classList.add('dark');
