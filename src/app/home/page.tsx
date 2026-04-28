@@ -36,7 +36,7 @@ export default function Home() {
   }, [inputText]);
 
   const handleSpeakAction = async (text: string, lang: string) => {
-    await speak(text, lang, 1, 'Female');
+    await speak(text, lang);
   };
 
   const handleChipClick = (phrase: string) => {

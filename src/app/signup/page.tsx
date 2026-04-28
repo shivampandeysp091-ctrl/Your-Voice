@@ -164,6 +164,7 @@ export default function Signup() {
               <button type="submit" className="w-full bg-[#9b5de5] text-white rounded-full py-3 font-bold mt-2 hover:bg-[#7c3aed] transition-colors shadow-md">
                 Create Free Account
               </button>
+              
             </form>
 
             <div className="text-center mt-6">

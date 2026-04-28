@@ -13,7 +13,7 @@ export default function Favourites() {
   const [inputText, setInputText] = useState("");
 
   const handleAddAction = (text: string, lang: string) => {
-    speak(text, lang, 1, 'Female');
+    speak(text, lang);
     addFavourite(text);
     setInputText("");
   };
@@ -48,7 +48,7 @@ export default function Favourites() {
                 <div className="flex items-center gap-2">
                   <button onClick={() => {
                     const currentLang = localStorage.getItem('yv-language') || 'hi-IN';
-                    speak(fav.text, currentLang, 1, 'Female');
+                    speak(fav.text, currentLang);
                   }} className="p-2 bg-[#ede9fe] text-[#9b5de5] rounded-full hover:bg-[#c084fc] hover:text-white transition-colors">
                     <Volume2 className="w-4 h-4" />
                   </button>

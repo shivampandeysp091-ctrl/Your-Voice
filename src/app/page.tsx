@@ -33,7 +33,7 @@ export default function LandingPage() {
     if (!demoText.trim()) return;
     setIsDemoSpeaking(true);
     try {
-      await speak(demoText, demoLang, 1, 'Female');
+      await speak(demoText, demoLang);
     } finally {
       setIsDemoSpeaking(false);
     }
